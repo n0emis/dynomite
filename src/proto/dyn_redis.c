@@ -137,6 +137,8 @@ static bool redis_arg1(struct msg *r) {
     case MSG_REQ_REDIS_SCRIPT_LOAD:
     case MSG_REQ_REDIS_SCRIPT_EXISTS:
 
+    case MSG_REQ_REDIS_RENAME:
+
       return true;
 
     default:
@@ -1124,6 +1126,12 @@ void redis_parse_req(struct msg *r, struct context *ctx) {
               r->is_read = 1;
               break;
             }
+
+	    if (str6icmp(m, 'r', 'e', 'n', 'a', 'm', 'e')) {
+              r->type = MSG_REQ_REDIS_RENAME;
+	      r->is_read = 1;
+	      break;
+	    }
 
             if (str6icmp(m, 'r', 'p', 'u', 's', 'h', 'x')) {
               r->type = MSG_REQ_REDIS_RPUSHX;
